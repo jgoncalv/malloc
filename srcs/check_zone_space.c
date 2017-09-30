@@ -18,8 +18,10 @@ int check_space(t_alloc *curr, t_alloc *next, size_t size)
   size_t len;
 
   zonesize = zone_size(size);
+
   if (next == NULL || curr->main_ptr != next->main_ptr)
   {
+
     len = (curr->main_ptr + zonesize) - (curr->ptr + curr->len);
     if (len <= size)
       return 1;
@@ -37,8 +39,11 @@ t_alloc *check_zone_space(t_alloc *list, size_t size)
 {
   t_alloc *list_next;
 
+
   if (list == NULL)
+  {
     return NULL;
+  }
   while (list)
   {
     list_next = list->next;

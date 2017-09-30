@@ -14,7 +14,7 @@
 
 void *malloc(size_t size)
 {
-  t_alloc *list;
+  void *list;
   t_alloc *curr_alloc;
   void *ptr;
 
@@ -22,15 +22,19 @@ void *malloc(size_t size)
     return NULL;
   list = zone_list(size);
 
-  // si il y a de la place alors on a le pointeur de la structure avant celui que l'on veut placer donc on alloue
-  // si il n'y en a pas alors on creer une nouvelle map et on alloue
+  printf(" ICI DEBUT %p\n", list);
   curr_alloc = check_zone_space(list, size);
   if (curr_alloc != NULL)
+  {
+    ft_putstr("my friend");
     return (allocate(size, curr_alloc));
+  }
   else
   {
     if ((ptr = create_new_zone(zone_size(size))) == NULL)
       return NULL;
-    return (assign_in_new_zone(ptr, size, &list));
+    return (assign_in_new_zone(ptr, size, (void *)list));
   }
+
+
 }

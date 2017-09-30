@@ -23,10 +23,21 @@ t_alloc *assign_in_new_zone(void *ptr, size_t size, t_alloc **list)
   new->ptr = ptr + sizeof(t_alloc);
   new->len = size;
   new->next = NULL;
+
   if (*list == NULL)
+  {
+
+    printf("LIST %p\n", *list);
+    printf(" ENV %p\n", g_env.tiny_alloc);
+    printf("  New %p\n", new);
     *list = new;
+    printf("LIST %p\n", *list);
+    printf(" ENV %p\n", g_env.tiny_alloc);
+    printf("  New %p\n", new);
+  }
   else
   {
+
     while (cpy)
     {
       if (cpy->next == NULL)

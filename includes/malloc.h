@@ -13,10 +13,11 @@
 #ifndef MALLOC_H
 # define MALLOC_H
 
+# include "libft.h"
 # include <unistd.h>
 # include <sys/mman.h>
-#include <sys/time.h>
-#include <sys/resource.h>
+# include <sys/time.h>
+# include <sys/resource.h>
 
 # define TINY 1024
 # define SMALL 2048
@@ -38,7 +39,7 @@ typedef struct s_env {
 t_env     g_env;
 
 size_t zone_size(size_t req_size);
-t_alloc *zone_list(size_t size);
+t_alloc **zone_list(size_t size);
 void *malloc(size_t size);
 t_alloc *check_zone_space(t_alloc *list, size_t size);
 t_alloc *assign_in_new_zone(void *ptr, size_t size, t_alloc **list);
