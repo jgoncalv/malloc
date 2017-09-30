@@ -29,6 +29,12 @@ INC_DIR		=	includes/
 OBJ_DIR		=	objs/
 
 SRC_FILE	=	malloc.c\
+	zone_list.c\
+	zone_size.c\
+	allocate.c\
+	assign_in_new_zone.c\
+	check_zone_space.c\
+	create_new_zone.c\
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_FILE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))

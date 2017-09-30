@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allocate.c                                         :+:      :+:    :+:   */
+/*   create_new_zone.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgoncalv <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/23 18:30:34 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/09/23 18:30:36 by jgoncalv         ###   ########.fr       */
+/*   Created: 2017/09/30 18:13:28 by jgoncalv          #+#    #+#             */
+/*   Updated: 2017/09/30 18:13:29 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-
-void *allocate(size_t size, t_alloc *list)
+static int check_limit(size_t size)
 {
-  t_alloc *next;
-  t_alloc *new;
+  struct rlimit limit;
+
+  if (getrlimit(size, &limit) == -1)
+    return (-1);
+  if (limit.rlim_cur < size)
+    return (-1);
+  return (0);
+}
+
+void *create_new_zone(size_t size)
+{
   void *ptr;
 
-  next = list->next;
-  new = (list->ptr + list->len);
-  ptr = new;
-  new->main_ptr = list->main_ptr;
-  new->ptr = ptr + sizeof(t_alloc);
-  new->len = size;
-  new->next = next;
-  list->next = new;
-  return new->ptr;
+  if (check_limit(size) == -1)
+    return (NULL);
+  ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+  if (ptr == MAP_FAILED)
+    return (NULL);
+  return (ptr);
 }

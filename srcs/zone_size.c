@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allocate.c                                         :+:      :+:    :+:   */
+/*   zone_size.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgoncalv <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/23 18:30:34 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/09/23 18:30:36 by jgoncalv         ###   ########.fr       */
+/*   Created: 2017/09/30 18:14:41 by jgoncalv          #+#    #+#             */
+/*   Updated: 2017/09/30 18:14:42 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-
-void *allocate(size_t size, t_alloc *list)
+static size_t get_zone(size_t size)
 {
-  t_alloc *next;
-  t_alloc *new;
-  void *ptr;
+  if (size <= TINY)
+    return TINY;
+  else if (size <= SMALL)
+    return SMALL;
+  return size;
+}
 
-  next = list->next;
-  new = (list->ptr + list->len);
-  ptr = new;
-  new->main_ptr = list->main_ptr;
-  new->ptr = ptr + sizeof(t_alloc);
-  new->len = size;
-  new->next = next;
-  list->next = new;
-  return new->ptr;
+size_t zone_size(size_t req_size)
+{
+  size_t size;
+  size_t pagesize;
+
+  pagesize = getpagesize();
+  size = (get_zone(req_size) + sizeof(t_alloc)) * 100;
+  if (size % pagesize)
+    size += pagesize - size % pagesize;
+  return size;
 }
