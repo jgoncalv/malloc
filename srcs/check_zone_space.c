@@ -12,46 +12,47 @@
 
 #include "malloc.h"
 
-int check_space(t_alloc *curr, t_alloc *next, size_t size)
+int			check_space(t_alloc *curr, t_alloc *next, size_t size)
 {
-  size_t zonesize;
-  size_t len;
+	size_t zonesize;
+	size_t len;
 
-  zonesize = zone_size(size);
-
-  if (next == NULL || curr->main_ptr != next->main_ptr)
-  {
-
-    len = (curr->main_ptr + zonesize) - (curr->ptr + curr->len);
-    if (len <= size)
-      return 1;
-  }
-  else
-  {
-    if (next->ptr - curr->ptr + curr->len <= size)
-      return 1;
-  }
-  return 0;
+	zonesize = zone_size(size);
+	if (next == NULL || curr->main_ptr != next->main_ptr)
+	{
+		len = ((size_t)curr->main_ptr + zonesize) -
+		((size_t)curr->ptr + curr->len);
+		if (len >= size + sizeof(t_alloc))
+			return (1);
+	}
+	else
+	{
+		len = ((size_t)next->ptr - sizeof(t_alloc)) -
+		((size_t)curr->ptr + curr->len);
+		if (len >= size + sizeof(t_alloc))
+			return (1);
+	}
+	return (0);
 }
 
-
-t_alloc *check_zone_space(t_alloc *list, size_t size)
+t_alloc		*check_zone_space(t_alloc *list, size_t size)
 {
-  t_alloc *list_next;
+	t_alloc *list_next;
 
+	if (list == NULL)
+		return (NULL);
+	while (list)
+	{
+		list_next = list->next;
+		if (check_space(list, list_next, size))
+			return (list);
+		list = list->next;
+	}
+	return (NULL);
+}
 
-  if (list == NULL)
-  {
-    return NULL;
-  }
-  while (list)
-  {
-    list_next = list->next;
-
-    if (check_space(list, list_next, size))
-      return list;
-
-    list = list->next;
-  }
-  return NULL;
+int			check_space_start_to_first_alloc(t_alloc *list, size_t size)
+{
+	return ((list && (size_t)list -
+				(size_t)list->main_ptr >= size + sizeof(t_alloc)) ? 1 : 0);
 }

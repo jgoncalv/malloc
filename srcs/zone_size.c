@@ -12,23 +12,23 @@
 
 #include "malloc.h"
 
-static size_t get_zone(size_t size)
+static size_t	get_zone(size_t size)
 {
-  if (size <= TINY)
-    return (TINY + sizeof(t_alloc)) * 100;
-  else if (size <= SMALL)
-    return (SMALL + sizeof(t_alloc)) * 100;
-  return (size + sizeof(t_alloc));
+	if (size <= TINY)
+		return (TINY + sizeof(t_alloc)) * 100;
+	else if (size <= SMALL)
+		return (SMALL + sizeof(t_alloc)) * 100;
+	return (size + sizeof(t_alloc));
 }
 
-size_t zone_size(size_t req_size)
+size_t			zone_size(size_t req_size)
 {
-  size_t size;
-  size_t pagesize;
+	size_t	size;
+	size_t	pagesize;
 
-  pagesize = getpagesize();
-  size = get_zone(req_size + sizeof(t_alloc));
-  if (size % pagesize)
-    size += pagesize - size % pagesize;
-  return size;
+	pagesize = getpagesize();
+	size = get_zone(req_size + sizeof(t_alloc));
+	if (size % pagesize)
+		size += pagesize - size % pagesize;
+	return (size);
 }

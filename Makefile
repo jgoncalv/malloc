@@ -35,6 +35,9 @@ SRC_FILE	=	malloc.c\
 	assign_in_new_zone.c\
 	check_zone_space.c\
 	create_new_zone.c\
+	free.c\
+	realloc.c\
+	show_alloc_mem.c
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_FILE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))

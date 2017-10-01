@@ -12,25 +12,26 @@
 
 #include "malloc.h"
 
-static int check_limit(size_t size)
+static int		check_limit(size_t size)
 {
-  struct rlimit limit;
+	struct rlimit	limit;
 
-  if (getrlimit(RLIMIT_MEMLOCK, &limit) == -1)
-    return (-1);
-  if (limit.rlim_cur < size)
-    return (-1);
-  return (0);
+	if (getrlimit(RLIMIT_MEMLOCK, &limit) == -1)
+		return (-1);
+	if (limit.rlim_cur < size)
+		return (-1);
+	return (0);
 }
 
-void *create_new_zone(size_t size)
+void			*create_new_zone(size_t size)
 {
-  void *ptr;
+	void	*ptr;
 
-  if (check_limit(size + sizeof(t_alloc)) == -1)
-    return (NULL);
-  ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-  if (ptr == MAP_FAILED)
-    return (NULL);
-  return (ptr);
+	if (check_limit(size + sizeof(t_alloc)) == -1)
+		return (NULL);
+	ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_PRIVATE
+		| MAP_ANONYMOUS, -1, 0);
+	if (ptr == MAP_FAILED)
+		return (NULL);
+	return (ptr);
 }

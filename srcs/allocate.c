@@ -12,20 +12,30 @@
 
 #include "malloc.h"
 
-
-void *allocate(size_t size, t_alloc *list)
+void	*allocate(size_t size, t_alloc *list)
 {
-  t_alloc *next;
-  t_alloc *new;
-  void *ptr;
+	t_alloc	*new;
 
-  next = list->next;
-  new = (list->ptr + list->len);
-  ptr = new;
-  new->main_ptr = list->main_ptr;
-  new->ptr = ptr + sizeof(t_alloc);
-  new->len = size;
-  new->next = next;
-  list->next = new;
-  return new->ptr;
+	new = (list->ptr + list->len);
+	new->ptr = (void *)((size_t)new + sizeof(t_alloc));
+	new->main_ptr = list->main_ptr;
+	new->len = size;
+	new->next = list->next;
+	new->zone_len = list->zone_len;
+	list->next = new;
+	return (new->ptr);
+}
+
+void	*allocate_at_start(size_t size, t_alloc **list)
+{
+	t_alloc	*new;
+
+	new = (*list)->main_ptr;
+	new->ptr = (void *)((size_t)new + sizeof(t_alloc));
+	new->main_ptr = (*list)->main_ptr;
+	new->len = size;
+	new->next = (*list)->next;
+	new->zone_len = (*list)->zone_len;
+	(*list) = new;
+	return (new->ptr);
 }

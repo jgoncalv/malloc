@@ -4,24 +4,31 @@
 
 int main() {
 
-	char *test;
+	char *test1;
+	
+	test1 = malloc(3);
+	test1 = ft_strcpy(test1, "ta\0");
 
-	test = malloc(3);
+	printf("%s\n", test1);
 
-	test[0] = 't';
-	test[1] = 'a';
-	test[2] = '\0';
-
-	ft_putstr(test);
-
-	test = malloc(10);
-	test = "vvoovvoov\0";
-	ft_putstr(test);
-
-
-		test = malloc(3000);
-		test = "vvoov\0";
-		ft_putstr(test);
+	show_alloc_mem();
 
 	return 0;
 }
+
+// int    main()
+// {
+//     int        i = 0;
+//     char    *win;
+//
+//     while (i++ < 10000)
+//     {
+//         if (!(win = (char*)malloc(sizeof(char) * 21)))
+//         {
+//             printf("Error\n");
+//             return (0);
+//         }
+//         strcpy(win, "hey !!! It's working");
+//         printf("%d: %s\n", i, win);
+//     }
+// }
