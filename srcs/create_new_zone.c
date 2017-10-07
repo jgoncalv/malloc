@@ -23,7 +23,8 @@ static int		check_limit(size_t size)
 	return (0);
 }
 
-void			*create_new_zone(size_t size)
+
+static void		*create_map(size_t size)
 {
 	void	*ptr;
 
@@ -34,4 +35,32 @@ void			*create_new_zone(size_t size)
 	if (ptr == MAP_FAILED)
 		return (NULL);
 	return (ptr);
+}
+
+
+void			*create_new_zone(t_zone **zone, size_t size)
+{
+	t_zone	*new_zone;
+	t_zone	*cpy;
+	size_t	zone_len;
+
+	zone_len = zone_size(size);
+	new_zone = create_map(zone_len);
+	if (!new_zone)
+		return (NULL);
+	new_zone->zone_len = zone_len;
+	new_zone->first_alloc = NULL;
+	new_zone->next = NULL;
+	cpy = *zone;
+	if (!(*zone))
+		*zone = new_zone;
+	else
+	{
+		while (cpy->next)
+		{
+			cpy = cpy->next;
+		}
+		cpy->next = new_zone;
+	}
+	return (new_zone);
 }

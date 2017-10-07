@@ -12,24 +12,79 @@
 
 #include "malloc.h"
 
-void	*malloc(size_t size)
+static void	*allocate(t_zone *zone_list, size_t size, size_t size_alloc)
 {
-	t_alloc	**list;
-	t_alloc	*curr_alloc;
+	t_alloc	*new_alloc;
+	t_alloc	*cpy_alloc;
+	t_zone	*zone;
+	size_t	len;
+
+	zone = zone_list;
+	while (zone)
+	{
+		if (!zone->first_alloc ||
+			((size_t)zone->first_alloc - ((size_t)zone + sizeof(t_zone))) >= size_alloc)
+		{
+			new_alloc = (void*)((size_t)zone + sizeof(t_zone));
+			new_alloc->len = size;
+			new_alloc->next = zone->first_alloc;
+			zone->first_alloc = new_alloc;
+			return (new_alloc + sizeof(t_alloc));
+		}
+		else
+		{
+			cpy_alloc = zone->first_alloc;
+			while (cpy_alloc)
+			{
+				if (cpy_alloc->next == NULL)
+				{
+					len = ((size_t)zone + zone->zone_len)  - ((size_t)cpy_alloc + sizeof(t_alloc) + cpy_alloc->len);
+					if (len >= size_alloc)
+					{
+						new_alloc = (void*)((size_t)cpy_alloc + sizeof(t_alloc) + cpy_alloc->len);
+						new_alloc->len = size;
+						new_alloc->next = NULL;
+						cpy_alloc->next = new_alloc;
+						return (new_alloc + sizeof(t_alloc));
+					}
+				}
+				else
+				{
+					len = (size_t)cpy_alloc->next - ((size_t)cpy_alloc + sizeof(t_alloc) + cpy_alloc->len);
+					if (len >= size_alloc)
+					{
+						new_alloc = (void*)((size_t)cpy_alloc + sizeof(t_alloc) + cpy_alloc->len);
+						new_alloc->len = size;
+						new_alloc->next = cpy_alloc->next;
+						cpy_alloc->next = new_alloc;
+						return (new_alloc + sizeof(t_alloc));
+					}
+				}
+				cpy_alloc = cpy_alloc->next;
+			}
+		}
+		zone = zone->next;
+	}
+	return (NULL);
+}
+
+
+void		*malloc(size_t size)
+{
+	t_zone	**zone_list_ptr;
+	t_zone	*zone;
+
 	void	*ptr;
 
 	if (size <= 0)
 		return (NULL);
-	list = zone_list(size);
-	if (check_space_start_to_first_alloc(*list, size) == 1)
-		return (allocate_at_start(size, list));
-	curr_alloc = check_zone_space(*list, size);
-	if (curr_alloc != NULL)
-		return (allocate(size, curr_alloc));
-	else
+	zone_list_ptr = zone_list(size);
+	ptr = allocate(*zone_list_ptr, size, size + sizeof(t_alloc));
+	if (!ptr)
 	{
-		if ((ptr = create_new_zone(zone_size(size))) == NULL)
+		if (!(zone = create_new_zone(zone_list_ptr, size)))
 			return (NULL);
-		return (assign_in_new_zone(ptr, size, list));
+		ptr = allocate(zone, size, size + sizeof(t_alloc));
 	}
+	return (ptr);
 }

@@ -1,18 +1,18 @@
-#include <stdio.h>
+//#include "includes/malloc.h"
 #include <stdlib.h>
-#include <string.h>
 
 int main()
 {
-  char *test;
-  char *test2;
+  int i;
+  char *addr;
 
-  test = malloc(10);
-  test2 = malloc(10);
-  strcpy(test, "111111111111\0");
-  strcpy(test2, "22222222222\0");
-  printf("%s %s\n", test, test2);
-  free(test2);
-  printf("%s\n", test2);
+  i = 0;
+  while (i < 1024)
+  {
+    addr = (char*)malloc(1024);
+    addr[0] = 42;
+    free(addr);
+    i++;
+  }
   return 0;
 }

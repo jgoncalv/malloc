@@ -12,12 +12,12 @@
 
 #include "malloc.h"
 
-t_alloc	**zone_list(size_t size)
+t_zone	**zone_list(size_t size)
 {
 	if (size <= TINY)
-		return (&g_env.tiny_alloc);
+		return (&g_env.tiny_zone);
 	else if (size <= SMALL)
-		return (&g_env.small_alloc);
+		return (&g_env.small_zone);
 	else
-		return (&g_env.large_alloc);
+		return (&g_env.large_zone);
 }

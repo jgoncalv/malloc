@@ -13,7 +13,6 @@
 #ifndef MALLOC_H
 # define MALLOC_H
 
-# include "libft.h"
 # include <unistd.h>
 # include <sys/mman.h>
 # include <sys/time.h>
@@ -23,32 +22,30 @@
 # define SMALL 2048
 
 typedef struct		s_alloc {
-	void			*main_ptr;
-	void			*ptr;
 	size_t			len;
-	size_t			zone_len;
 	struct s_alloc	*next;
 }					t_alloc;
 
+typedef struct		s_zone
+{
+	size_t			zone_len;
+	struct s_alloc	*first_alloc;
+	struct s_zone	*next;
+}					t_zone;
+
 typedef struct		s_env {
-	t_alloc			*tiny_alloc;
-	t_alloc			*small_alloc;
-	t_alloc			*large_alloc;
+	struct s_zone	*tiny_zone;
+	struct s_zone	*small_zone;
+	struct s_zone	*large_zone;
 }					t_env;
 
 t_env				g_env;
 
 size_t				zone_size(size_t req_size);
-t_alloc				**zone_list(size_t size);
+t_zone				**zone_list(size_t size);
 void				*malloc(size_t size);
-t_alloc				*check_zone_space(t_alloc *list, size_t size);
-t_alloc				*assign_in_new_zone(void *ptr, size_t size, t_alloc **list);
-void				*create_new_zone(size_t size);
-void				*allocate(size_t size, t_alloc *list);
+void				*create_new_zone(t_zone **zone, size_t size);
 void				free(void *ptr);
-int					check_space_start_to_first_alloc(t_alloc *list,
-					size_t size);
-void				*allocate_at_start(size_t size, t_alloc **list);
 void				*realloc(void *ptr, size_t size);
 void				show_alloc_mem();
 
