@@ -12,19 +12,53 @@
 
 #include "malloc.h"
 
-static int	free_in_list(t_alloc **list, void *ptr)
+static int	check_and_free(t_alloc *alloc, void *ptr)
 {
-	t_alloc	*cpy;
-	t_alloc	*next;
+	t_alloc *tmp;
 
-	
-	while (zone)
+	while (alloc)
 	{
-		
+		tmp = alloc->next;
+		if (tmp == ptr)
+		{
+			alloc->next = tmp->next;
+			return (1);
+		}
+		alloc = alloc->next;
+	}
+	return (0);
+}
+
+static int	free_in_list(t_zone **zone, void *ptr)
+{
+	t_zone	*cpy;
+	t_zone *tmp;
+	int		res;
+	
+	cpy = *zone;
+	res = 0;
+	while (cpy)
+	{	
+		res = check_and_free(cpy->first_alloc, ptr);
+		if (cpy->first_alloc == NULL && res == 1)
+		{
+			if (*zone == cpy && (*zone)->next)
+			{
+				*zone = (*zone)->next;
+				munmap(cpy, cpy->zone_len);
+			}
+			else if (cpy != *zone)
+			{
+				tmp = *zone;
+				while (tmp->next != cpy)
+					tmp = tmp->next;
+				tmp->next = cpy->next;
+				munmap(cpy, cpy->zone_len);
+			}
+		}
 		cpy = cpy->next;
 	}
-
-	return (0);
+	return (res);
 }
 
 void		free(void *ptr)
@@ -34,8 +68,8 @@ void		free(void *ptr)
 	if (ptr == NULL)
 		return ;
 	ptr_rch = (void *)((size_t)ptr - sizeof(t_alloc));
-	if (free_in_list(&g_env.tiny_alloc, ptr_rch) == 1
-		|| free_in_list(&g_env.small_alloc, ptr_rch) == 1
-		|| free_in_list(&g_env.large_alloc, ptr_rch) == 1)
+	if (free_in_list(&g_env.tiny_zone, ptr_rch) == 1
+		|| free_in_list(&g_env.small_zone, ptr_rch) == 1
+		|| free_in_list(&g_env.large_zone, ptr_rch) == 1)
 		return ;
 }

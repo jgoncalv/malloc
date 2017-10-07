@@ -12,13 +12,22 @@
 
 #include "malloc.h"
 
-t_alloc *search_in_env(void *ptr, t_alloc *list)
+t_alloc *search_in_env(void *ptr, t_zone *zone)
 {
-	while (list)
+	t_alloc	*alloc;
+
+	while (zone)
 	{
-		if (list->ptr == ptr)
-			return (list);
-		list = list->next;
+		alloc = zone->first_alloc;
+		while (alloc)
+		{
+			if (alloc == ptr)
+			{
+				return (alloc);
+			}
+			alloc = alloc->next;
+		}
+		zone = zone->next;
 	}
 	return (NULL);
 }
@@ -27,45 +36,32 @@ void	*realloc(void *ptr, size_t size)
 {
 	void	*new_ptr;
 	t_alloc	*alloc;
+	void	*rch_ptr;
 
-	if (ptr == NULL)
+	new_ptr = NULL;
+	rch_ptr = (void*)((size_t)ptr - sizeof(t_alloc));
+	if (size == 0)
 		return (NULL);
-	if ((alloc = search_in_env(ptr, g_env.tiny_alloc))
-		|| (alloc = search_in_env(ptr, g_env.small_alloc))
-		|| (alloc = search_in_env(ptr, g_env.large_alloc)))
+	if ((alloc = search_in_env(rch_ptr, g_env.tiny_zone))
+		|| (alloc = search_in_env(rch_ptr, g_env.small_zone))
+		|| (alloc = search_in_env(rch_ptr, g_env.large_zone)))
 	{
 		if (alloc->len >= size)
 		{
 			alloc->len = size;
 			return (ptr);
 		}
-		else if (alloc->next && (((size_t)alloc->next - (size_t)alloc->ptr) >= size))
-		{
-			alloc->len = size;
-			return (ptr);
-		}
-		else if (alloc->next == NULL)
-		{
-			if (alloc->zone_len - (size_t)alloc->ptr >= size)
-			{
-				alloc->len = size;
-			}
-			return (ptr);
-		}
 		else
 		{
-			if ((new_ptr = malloc(size)) == NULL)
-				return (NULL);
-			ft_memcpy(new_ptr, ptr, size);
+			new_ptr = malloc(size);
+			while (size > 0)
+			{
+				((char*)new_ptr)[size - 1] = ((char*)ptr)[size - 1];
+				size--;
+			}
 			free(ptr);
+			return (new_ptr);
 		}
 	}
-	else
-	{
-		if ((new_ptr = malloc(size)) == NULL)
-			return (NULL);
-		ft_memcpy(new_ptr, ptr, size);
-		free(ptr);
-	}
-	return (new_ptr);
+	return (NULL);
 }

@@ -12,6 +12,54 @@
 
 #include "malloc.h"
 
+size_t		ft_strlen(const char *str)
+{
+	size_t i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+
+
+void	ft_putstr(char const *str)
+{
+	write(1, str, ft_strlen(str));
+}
+
+void	ft_putnbr(intmax_t n)
+{
+	if (n >= 10 || n <= -10)
+	{
+		ft_putnbr(n / 10);
+		if (n < 0)
+			ft_putchar((n % 10) * -1 + '0');
+		else
+			ft_putchar(n % 10 + '0');
+	}
+	else
+	{
+		if (n < 0)
+		{
+			ft_putchar('-');
+			ft_putchar((n % 10) * -1 + '0');
+		}
+		else
+			ft_putchar(n % 10 + '0');
+	}
+}
+
+
+
 static double	ft_pow(double n, int exp)
 {
     if (exp == 0)
@@ -49,18 +97,16 @@ static void		en_hex(size_t hex)
 	}
 }
 
-static void		show_alloc_mem_while(t_alloc *list, char *name)
+static void		show_alloc_mem_while(t_alloc *list)
 {
-	ft_putstr(name);
-	ft_putstr(" : ");
-	en_hex((size_t)list);
-	ft_putchar('\n');
+	size_t ptr;
+
 	while (list)
 	{
-		printf("%p\n", list->ptr);
-		en_hex((size_t)list->ptr);
+		ptr = (size_t)list + sizeof(t_alloc);
+		en_hex(ptr);
 		ft_putstr(" - ");
-		en_hex((size_t)list->ptr + list->len - 1);
+		en_hex(ptr + list->len - 1);
 		ft_putstr(" : ");
 		ft_putnbr(list->len);
 		ft_putstr(" octets\n");
@@ -68,9 +114,22 @@ static void		show_alloc_mem_while(t_alloc *list, char *name)
 	}
 }
 
+static void		show_zone(t_zone *zone, char *name)
+{
+	ft_putstr(name);
+	ft_putstr(" : ");
+	en_hex((size_t)zone);
+	ft_putstr("\n");
+	while (zone)
+	{
+		show_alloc_mem_while(zone->first_alloc);
+		zone = zone->next;
+	}
+}
+
 void			show_alloc_mem()
 {
-	show_alloc_mem_while(g_env.tiny_alloc, "TINY");
-	show_alloc_mem_while(g_env.small_alloc, "SMALL");
-	show_alloc_mem_while(g_env.large_alloc, "LARGE");
+	show_zone(g_env.tiny_zone, "TINY");
+	show_zone(g_env.small_zone, "SMALL");
+	show_zone(g_env.large_zone, "LARGE");
 }
