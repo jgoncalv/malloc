@@ -17,6 +17,7 @@
 # include <sys/mman.h>
 # include <sys/time.h>
 # include <sys/resource.h>
+# include <stdio.h>
 
 # define TINY 1024
 # define SMALL 2048

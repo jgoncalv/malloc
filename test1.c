@@ -7,13 +7,14 @@ int main()
 	char *addr;
 
 	i = 0;
-	while (i < 1024)
+	while (i < 10)
 	{
 		addr = (char*)malloc(1024);
 		addr[0] = 42;
-//		printf("%p\n", addr);
-		//free(addr);
+		//printf("==== BREAK  ==== : %p et %p\n", addr, addr - sizeof(t_alloc));
+		free(addr);
 		i++;
 	}
+	show_alloc_mem();
 	return 0;
 }

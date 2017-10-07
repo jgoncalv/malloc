@@ -29,7 +29,7 @@ static void	*allocate(t_zone *zone_list, size_t size, size_t size_alloc)
 			new_alloc->len = size;
 			new_alloc->next = zone->first_alloc;
 			zone->first_alloc = new_alloc;
-			return (new_alloc + sizeof(t_alloc));
+			return ((void*)((size_t)new_alloc + sizeof(t_alloc)));
 		}
 		else
 		{
@@ -45,7 +45,8 @@ static void	*allocate(t_zone *zone_list, size_t size, size_t size_alloc)
 						new_alloc->len = size;
 						new_alloc->next = NULL;
 						cpy_alloc->next = new_alloc;
-						return (new_alloc + sizeof(t_alloc));
+
+						return ((void*)((size_t)new_alloc + sizeof(t_alloc)));
 					}
 				}
 				else
@@ -57,7 +58,8 @@ static void	*allocate(t_zone *zone_list, size_t size, size_t size_alloc)
 						new_alloc->len = size;
 						new_alloc->next = cpy_alloc->next;
 						cpy_alloc->next = new_alloc;
-						return (new_alloc + sizeof(t_alloc));
+
+						return ((void*)((size_t)new_alloc + sizeof(t_alloc)));
 					}
 				}
 				cpy_alloc = cpy_alloc->next;
