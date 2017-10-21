@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_new_zone.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgoncalv <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/30 18:13:28 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/09/30 18:13:29 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 14:43:06 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int		check_limit(size_t size)
 	return (0);
 }
 
-
 static void		*create_map(size_t size)
 {
 	void	*ptr;
@@ -36,7 +35,6 @@ static void		*create_map(size_t size)
 		return (NULL);
 	return (ptr);
 }
-
 
 void			*create_new_zone(t_zone **zone, size_t size)
 {

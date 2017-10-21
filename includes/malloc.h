@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgoncalv <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 15:38:26 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/09/23 15:38:30 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 15:51:12 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,8 @@ void				free(void *ptr);
 void				*realloc(void *ptr, size_t size);
 void				show_alloc_mem();
 
+size_t				ft_strlen(const char *str);
+void				ft_putnbr(intmax_t n);
+void				ft_putchar(char c);
+void				ft_putstr(char const *str);
 #endif
