@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/01 19:05:42 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 17:28:29 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 21:26:56 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,12 @@ void			*realloc(void *ptr, size_t size)
 	t_alloc	*alloc;
 
 	new_ptr = NULL;
-	if (size == 0
-		|| !(alloc = get_alloc((void*)((size_t)ptr - sizeof(t_alloc)))))
+	if (size == 0)
 		return (NULL);
-	if (alloc->len >= size)
+	if (ptr == NULL)
+		return (malloc(size));
+	alloc = ((ptr) ? get_alloc((void*)((size_t)ptr - sizeof(t_alloc))) : NULL);
+	if (alloc && alloc->len >= size)
 	{
 		alloc->len = size;
 		return (ptr);
