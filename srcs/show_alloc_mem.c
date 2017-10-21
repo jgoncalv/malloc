@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 18:55:24 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 16:28:39 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 18:11:55 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,15 @@ static void		en_hex(size_t hex)
 	}
 }
 
-static void		show_alloc_mem_while(t_alloc *list)
+static size_t	show_alloc_mem_while(t_alloc *list)
 {
 	size_t ptr;
+	size_t total;
 
+	total = 0;
 	while (list)
 	{
+		total += list->len;
 		ptr = (size_t)list + sizeof(t_alloc);
 		en_hex(ptr);
 		ft_putstr(" - ");
@@ -65,24 +68,35 @@ static void		show_alloc_mem_while(t_alloc *list)
 		ft_putstr(" octets\n");
 		list = list->next;
 	}
+	return (total);
 }
 
-static void		show_zone(t_zone *zone, char *name)
+static size_t	show_zone(t_zone *zone, char *name)
 {
+	size_t total;
+
+	total = 0;
 	while (zone)
 	{
 		ft_putstr(name);
 		ft_putstr(" : ");
 		en_hex((size_t)zone);
 		ft_putstr("\n");
-		show_alloc_mem_while(zone->first_alloc);
+		total += show_alloc_mem_while(zone->first_alloc);
 		zone = zone->next;
 	}
+	return (total);
 }
 
 void			show_alloc_mem(void)
 {
-	show_zone(g_env.tiny_zone, "TINY");
-	show_zone(g_env.small_zone, "SMALL");
-	show_zone(g_env.large_zone, "LARGE");
+	size_t total_alloc;
+
+	total_alloc = 0;
+	total_alloc += show_zone(g_env.tiny_zone, "TINY");
+	total_alloc += show_zone(g_env.small_zone, "SMALL");
+	total_alloc += show_zone(g_env.large_zone, "LARGE");
+	ft_putstr("Total = ");
+	ft_putnbr(total_alloc);
+	ft_putstr(" octets\n");
 }
