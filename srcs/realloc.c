@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/01 19:05:42 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 14:53:24 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 17:28:29 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,22 @@ static t_alloc	*get_alloc(void *ptr)
 	return (NULL);
 }
 
+static void		copy_ptr(void *dest, void *src, size_t size)
+{
+	size_t	len;
+	size_t	i;
+	t_alloc	*alloc_src;
+
+	i = 0;
+	alloc_src = (t_alloc*)(src - sizeof(t_alloc));
+	len = alloc_src->len;
+	while (i < len && i < size)
+	{
+		((char*)dest)[i] = ((char*)src)[i];
+		i++;
+	}
+}
+
 void			*realloc(void *ptr, size_t size)
 {
 	void	*new_ptr;
@@ -58,11 +74,7 @@ void			*realloc(void *ptr, size_t size)
 	else
 	{
 		new_ptr = malloc(size);
-		while (size > 0)
-		{
-			((char*)new_ptr)[size - 1] = ((char*)ptr)[size - 1];
-			size--;
-		}
+		copy_ptr(new_ptr, ptr, size);
 		free(ptr);
 		return (new_ptr);
 	}

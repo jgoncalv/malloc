@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/01 16:13:46 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 15:09:34 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/10/21 17:56:51 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ static int	free_in_list(t_zone **zone, void *ptr)
 	{
 		res = check_and_free(&cpy->first_alloc, ptr);
 		if (cpy->first_alloc == NULL && res == 1)
+		{
 			free_in_list_next(zone, cpy);
+			return (res);
+		}
 		cpy = cpy->next;
 	}
 	return (res);
@@ -78,7 +81,7 @@ void		free(void *ptr)
 
 	if (ptr == NULL)
 		return ;
-	ptr_rch = ptr - sizeof(t_alloc);
+	ptr_rch = (void*)((size_t)ptr - sizeof(t_alloc));
 	if (free_in_list(&g_env.tiny_zone, ptr_rch) == 1
 		|| free_in_list(&g_env.small_zone, ptr_rch) == 1
 		|| free_in_list(&g_env.large_zone, ptr_rch) == 1)
