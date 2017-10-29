@@ -6,7 +6,7 @@
 #    By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/27 15:05:44 by jgoncalv          #+#    #+#              #
-#    Updated: 2017/10/21 15:51:35 by jgoncalv         ###   ########.fr        #
+#    Updated: 2017/10/29 15:00:55 by jgoncalv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,9 +20,9 @@ NAME		=	$(LINK:.so=$(addprefix _, $(HOSTTYPE)).so)
 CC			=	gcc
 FLAGS		=	-Wall -Wextra -Werror -g
 
-SRC_DIR		=	srcs/
-INC_DIR		=	includes/
-OBJ_DIR		=	objs/
+SRC_DIR		=	src/
+INC_DIR		=	include/
+OBJ_DIR		=	obj/
 
 SRC_FILE	=	malloc.c\
 	zone_list.c\
