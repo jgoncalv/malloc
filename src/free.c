@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/01 16:13:46 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 17:56:51 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/11/02 20:37:09 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,22 @@ static int	check_and_free(t_alloc **alloc, void *ptr)
 static void	free_in_list_next(t_zone **zone, t_zone *cpy)
 {
 	t_zone *tmp;
+	t_zone *tmp2;
 
 	if (*zone == cpy && (*zone)->next)
 	{
-		*zone = (*zone)->next;
-		munmap(cpy, cpy->zone_len);
+		tmp = (*zone)->next;
+		if (munmap(cpy, cpy->zone_len) == 0)
+			*zone = tmp;
 	}
 	else if (cpy != *zone)
 	{
 		tmp = *zone;
 		while (tmp->next != cpy)
 			tmp = tmp->next;
-		tmp->next = cpy->next;
-		munmap(cpy, cpy->zone_len);
+		tmp2 = cpy->next;
+		if (munmap(cpy, cpy->zone_len) == 0)
+			tmp->next = cpy->next;
 	}
 }
 
@@ -75,7 +78,7 @@ static int	free_in_list(t_zone **zone, void *ptr)
 	return (res);
 }
 
-void		free(void *ptr)
+void		ft_free(void *ptr)
 {
 	void	*ptr_rch;
 

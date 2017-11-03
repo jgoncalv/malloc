@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/01 19:05:42 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 21:26:56 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/11/02 22:32:38 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,27 +57,38 @@ static void		copy_ptr(void *dest, void *src, size_t size)
 	}
 }
 
-void			*realloc(void *ptr, size_t size)
+void			*ft_realloc_now(void *ptr, size_t size)
 {
 	void	*new_ptr;
 	t_alloc	*alloc;
 
 	new_ptr = NULL;
-	if (size == 0)
-		return (NULL);
-	if (ptr == NULL)
-		return (malloc(size));
 	alloc = ((ptr) ? get_alloc((void*)((size_t)ptr - sizeof(t_alloc))) : NULL);
-	if (alloc && alloc->len >= size)
+	if (!alloc)
+		return (NULL);
+	if (alloc->len >= size)
 	{
 		alloc->len = size;
 		return (ptr);
 	}
 	else
 	{
-		new_ptr = malloc(size);
+		if (!(new_ptr = ft_malloc(size)))
+			return (NULL);
 		copy_ptr(new_ptr, ptr, size);
-		free(ptr);
+		ft_free(ptr);
 		return (new_ptr);
 	}
+}
+
+void			*ft_realloc(void *ptr, size_t size)
+{
+	if (ptr == NULL)
+		return (ft_malloc(size));
+	if (!size)
+	{
+		ft_free(ptr);
+		return (NULL);
+	}
+	return (ft_realloc_now(ptr, size));
 }

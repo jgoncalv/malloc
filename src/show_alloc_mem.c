@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 18:55:24 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 18:11:55 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/11/02 20:38:17 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static size_t	show_zone(t_zone *zone, char *name)
 	return (total);
 }
 
-void			show_alloc_mem(void)
+void			ft_show_alloc_mem(void)
 {
 	size_t total_alloc;
 

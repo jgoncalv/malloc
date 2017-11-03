@@ -6,7 +6,7 @@
 #    By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/27 15:05:44 by jgoncalv          #+#    #+#              #
-#    Updated: 2017/10/29 15:00:55 by jgoncalv         ###   ########.fr        #
+#    Updated: 2017/11/03 13:31:31 by jgoncalv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,14 +24,17 @@ SRC_DIR		=	src/
 INC_DIR		=	include/
 OBJ_DIR		=	obj/
 
-SRC_FILE	=	malloc.c\
-	zone_list.c\
-	zone_size.c\
+SRC_FILE	= \
+	calloc.c\
 	create_new_zone.c\
-	realloc.c\
 	free.c\
+	main_functions.c\
+	malloc.c\
+	putfct.c\
+	realloc.c\
 	show_alloc_mem.c\
-	putfct.c
+	zone_list.c\
+	zone_size.c
 
 SRCS		=	$(addprefix $(SRC_DIR), $(SRC_FILE))
 OBJS		=	$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o))

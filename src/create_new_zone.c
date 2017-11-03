@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/30 18:13:28 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 14:43:06 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/11/02 22:31:14 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ void			*create_new_zone(t_zone **zone, size_t size)
 	else
 	{
 		while (cpy->next)
-		{
 			cpy = cpy->next;
-		}
 		cpy->next = new_zone;
 	}
 	return (new_zone);

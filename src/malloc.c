@@ -6,7 +6,7 @@
 /*   By: jgoncalv <jgoncalv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/23 15:33:57 by jgoncalv          #+#    #+#             */
-/*   Updated: 2017/10/21 17:13:48 by jgoncalv         ###   ########.fr       */
+/*   Updated: 2017/11/02 22:32:44 by jgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void		*allocate(t_zone *zone_list, size_t size, size_t size_alloc)
 	return (NULL);
 }
 
-void			*malloc(size_t size)
+void			*ft_malloc(size_t size)
 {
 	t_zone	**zone_list_ptr;
 	t_zone	*zone;
